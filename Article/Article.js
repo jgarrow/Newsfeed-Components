@@ -92,6 +92,13 @@ const data = [
     firstParagraph: `GatsbyJS is the best. It's a framework for React that can create super fast websites!`,
     secondParagraph: `You can even connect it with Netlify CMS to create a blog! You should check it out.`,
     thirdParagraph: `Even though I'm brand new to React and Gatsby, I've been working on making my own personal site/blog using GatsbyJS and Netlify CMS. It's challenging with my limited knowledge, but it's awesome!`
+  },
+  {
+    title: 'Avatar: The Last Airbender',
+    date: 'April 25th, 2019',
+    firstParagraph: `ATLA is one of the greatest cartoons ever. Not only does it create a beautiful world, it has fantastic character development.`,
+    secondParagraph: `Zuko has one of the greatest redemption arcs and you can see growth in all of the main characters from when they're first introduced to the end of the final season. The character development isn't limited to one or two people.`,
+    thirdParagraph: `I'm so excited for the live-action remake of the series that's coming to Netflix! It better not be as horrendous as the live-action movie...we don't talk about that monstrosity.`
   }
 ];
 
@@ -148,6 +155,7 @@ function articleComponentCreator(obj) {
   span.textContent = 'Expand';
 
   span.addEventListener('click', () => {
+    divArticle.style.transition = 'all 0.15s ease-in-out';
     divArticle.classList.toggle('article-open');
     if (divArticle.classList.contains('article-open')) {
       span.textContent = 'Close';
