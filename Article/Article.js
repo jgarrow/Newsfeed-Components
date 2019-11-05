@@ -85,6 +85,13 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: 'Why You Should Use GatsbyJS',
+    date: 'July 4th, 2019',
+    firstParagraph: `GatsbyJS is the best. It's a framework for React that can create super fast websites!`,
+    secondParagraph: `You can even connect it with Netlify CMS to create a blog! You should check it out.`,
+    thirdParagraph: `Even though I'm brand new to React and Gatsby, I've been working on making my own personal site/blog using GatsbyJS and Netlify CMS. It's challenging with my limited knowledge, but it's awesome!`
   }
 ];
 
@@ -101,14 +108,62 @@ const data = [
 
   Hint: You will need to use createElement more than once here!
 
-  Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+  Your function should take either an object as its one argument, or 5 separate arguments mapping to each piece of the data object above.
 
   Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
 
   Step 3: return the entire component.
 
-  Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
+  Step 4: Map over the data, creating a component for each object and add each component to the DOM as children of the 'articles' div.
 
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+
+function articleComponentCreator(obj) {
+  const divArticle = document.createElement('div');
+  divArticle.classList.add('article');
+  
+  const title = document.createElement('h2');
+  title.textContent = obj.title;
+  divArticle.appendChild(title);
+
+  const objKeys = Object.keys(obj);
+
+  objKeys.forEach(k => {
+    if (k === 'date' || k.includes('Paragraph')) {
+      let paragraph = document.createElement('p');
+      paragraph.textContent = obj[k];
+
+      if (k === 'date') {
+        paragraph.classList.add('date');
+      }
+
+      divArticle.appendChild(paragraph);
+    }
+  })
+  const span = document.createElement('span');
+  span.classList.add('expandButton');
+  // initialize span.textContent
+  span.textContent = 'Expand';
+
+  span.addEventListener('click', () => {
+    divArticle.classList.toggle('article-open');
+    if (divArticle.classList.contains('article-open')) {
+      span.textContent = 'Close';
+    } else {
+      span.textContent = 'Expand';
+    }
+  })
+
+  divArticle.appendChild(span);
+
+  return divArticle;
+}
+
+const articles = document.querySelector('.articles');
+const dataArray = data.map(article => {
+  articles.appendChild(articleComponentCreator(article));
+})
+
+// Are we supposed to be able to see the span? My guess is that we can't see it because it doesn't have any content. So we can't click on it to toggle the article to open, but we're also not supposed to touch the HTML..
