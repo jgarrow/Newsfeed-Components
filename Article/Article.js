@@ -165,7 +165,7 @@ function articleComponentCreator(obj) {
   })
 
   divArticle.appendChild(span);
-
+  console.log(divArticle);
   return divArticle;
 }
 
@@ -174,4 +174,79 @@ const dataArray = data.map(article => {
   articles.appendChild(articleComponentCreator(article));
 })
 
-// Are we supposed to be able to see the span? My guess is that we can't see it because it doesn't have any content. So we can't click on it to toggle the article to open, but we're also not supposed to touch the HTML..
+// create form for creating new article
+const formContainer = document.createElement('div');
+const form = document.createElement('form');
+const titleInput = document.createElement('input');
+const contentInput = document.createElement('textarea');
+const submit = document.createElement('input');
+const titleLabel = document.createElement('p');
+const contentLabel = document.createElement('p');
+const labelContainer = document.createElement('div');
+
+form.id = 'new-article';
+titleInput.id = 'title';
+contentInput.id = 'content';
+formContainer.classList.add('form-container');
+
+titleInput.type = 'text';
+submit.type = 'submit';
+
+titleInput.name = 'title';
+contentInput.name = 'content';
+
+contentInput.form = 'new-article';
+contentInput.rows = '10';
+
+titleLabel.textContent = 'Title:';
+contentLabel.textContent = 'Content:';
+
+form.method = 'get';
+
+form.appendChild(titleInput);
+form.appendChild(contentInput);
+form.appendChild(submit);
+labelContainer.appendChild(titleLabel);
+labelContainer.appendChild(contentLabel);
+formContainer.appendChild(labelContainer);
+formContainer.appendChild(form);
+
+form.style.display = 'flex';
+form.style.flexDirection = 'column';
+form.style.width = '300px';
+form.style.height = '200px';
+formContainer.style.display = 'flex';
+formContainer.style.flexWrap = 'nowrap';
+formContainer.style.width = '350px';
+formContainer.style.margin = '0 auto 2rem';
+titleInput.style.margin = '1rem 0';
+contentInput.style.marginBottom = '1rem';
+labelContainer.style.marginRight = '1rem';
+
+const body = document.querySelector('body');
+formContainer.appendChild(form);
+body.appendChild(formContainer);
+
+// Creates a new article when form is submitted
+document.querySelector('form').onsubmit = function(e) {
+  e.preventDefault();
+  let date = new Date();
+  date = date.toLocaleDateString("en-US", {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+  const title = document.getElementById('title').value;
+  const contentString = document.getElementById('content').value;
+
+  const newArticle = {
+    title,
+    date,
+  }
+
+  let contentArray = contentString.split("\n");
+  contentArray.forEach((item, index) => {
+    newArticle[`${index + 1}Paragraph`] = item;
+  })
+  articles.appendChild(articleComponentCreator(newArticle));
+}
