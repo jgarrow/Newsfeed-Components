@@ -168,7 +168,7 @@ function articleComponentCreator(obj) {
   console.log(divArticle);
   return divArticle;
 }
-
+console.log(data);
 const articles = document.querySelector('.articles');
 const dataArray = data.map(article => {
   articles.appendChild(articleComponentCreator(article));
@@ -176,13 +176,14 @@ const dataArray = data.map(article => {
 
 // create form for creating new article
 const formContainer = document.createElement('div');
+const formHeader = document.createElement('h3');
 const form = document.createElement('form');
+const titleLabel = document.createElement('label');
 const titleInput = document.createElement('input');
+const contentLabel = document.createElement('label');
 const contentInput = document.createElement('textarea');
 const submit = document.createElement('input');
-const titleLabel = document.createElement('p');
-const contentLabel = document.createElement('p');
-const labelContainer = document.createElement('div');
+// const labelContainer = document.createElement('div');
 
 form.id = 'new-article';
 titleInput.id = 'title';
@@ -195,33 +196,73 @@ submit.type = 'submit';
 titleInput.name = 'title';
 contentInput.name = 'content';
 
+titleLabel.for = 'title';
+contentLabel.for = 'content';
+
+formHeader.textContent = 'Submit New Article';
+titleLabel.textContent = 'Title';
+contentLabel.textContent = 'Content';
+
 contentInput.form = 'new-article';
-contentInput.rows = '10';
+contentInput.rows = '20';
+contentInput.cols = '20';
 
 titleLabel.textContent = 'Title:';
 contentLabel.textContent = 'Content:';
 
 form.method = 'get';
 
+form.appendChild(formHeader);
+form.appendChild(titleLabel);
 form.appendChild(titleInput);
+form.appendChild(contentLabel);
 form.appendChild(contentInput);
 form.appendChild(submit);
-labelContainer.appendChild(titleLabel);
-labelContainer.appendChild(contentLabel);
-formContainer.appendChild(labelContainer);
 formContainer.appendChild(form);
+
+// form styles
+formContainer.style.display = 'flex';
+formContainer.style.flexWrap = 'nowrap';
+formContainer.style.justifyContent = 'center';
+formContainer.style.alignItems = 'center';
+formContainer.style.width = '450px';
+formContainer.style.margin = '0 auto 2rem';
+formContainer.style.boxShadow = '2px 2px 2px lightgrey';
+formContainer.style.borderRadius = '10px';
+formContainer.style.border = '1px solid lightgrey';
+formContainer.style.padding = '10px 15px';
+formContainer.style.backgroundColor = 'white';
 
 form.style.display = 'flex';
 form.style.flexDirection = 'column';
-form.style.width = '300px';
-form.style.height = '200px';
-formContainer.style.display = 'flex';
-formContainer.style.flexWrap = 'nowrap';
-formContainer.style.width = '350px';
-formContainer.style.margin = '0 auto 2rem';
+form.style.width = '400px';
+form.style.height = '400px';
+
 titleInput.style.margin = '1rem 0';
+titleInput.style.borderRadius = '4px';
+titleInput.style.padding = '8px 15px';
+titleInput.style.border = '1px solid #ccc';
+titleInput.style.fontSize = '1em';
+titleInput.style.backgroundColor = '#fffef7';
+
 contentInput.style.marginBottom = '1rem';
-labelContainer.style.marginRight = '1rem';
+contentInput.style.borderRadius = '4px';
+contentInput.style.padding = '8px 15px';
+contentInput.style.border = '1px solid #ccc';
+contentInput.style.fontSize = '1em';
+contentInput.style.backgroundColor = '#fffef7';
+
+submit.style.borderRadius = '4px';
+submit.style.fontSize = '1em';
+submit.style.backgroundColor = '#fffef7';
+
+submit.addEventListener('mouseenter', () => {
+  submit.style.backgroundColor = 'lightgrey';
+
+  submit.addEventListener('mouseleave', () => {
+    submit.style.backgroundColor = '#fffef7';
+  })
+})
 
 const body = document.querySelector('body');
 formContainer.appendChild(form);
