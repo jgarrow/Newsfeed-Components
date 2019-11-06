@@ -127,13 +127,53 @@ const data = [
 
 */
 
-function articleComponentCreator(obj) {
+// function doneReading(id, article) {
+//   if (document.querySelector(id).checked) {
+//     article.style.display = "none";
+//   }
+// };
+
+function articleComponentCreator(obj, btnId) {
   const divArticle = document.createElement('div');
   divArticle.classList.add('article');
   
   const title = document.createElement('h2');
   title.textContent = obj.title;
   divArticle.appendChild(title);
+
+  const doneButton = document.createElement('input');
+  doneButton.type = "checkbox";
+  doneButton.id = `done-btn${btnId}`;
+  // Make article "disappear" when done button is checked
+  doneButton.onclick = function doneReading() {
+    {
+      if (document.querySelector(`#done-btn${btnId}`).checked) {
+        divArticle.style.animation = "articleDisappear 0.3s forwards";
+
+        divArticle.addEventListener('animationend', () => {
+          divArticle.style.display = "none";
+        })
+      }
+    };
+  }
+
+  const doneBtnLabel = document.createElement('label');
+  doneBtnLabel.htmlFor = `done-btn${btnId}`;
+  doneBtnLabel.textContent = "Done reading";
+  doneBtnLabel.style.fontSize = "14px";
+
+  const doneContainer = document.createElement('div');
+  doneContainer.appendChild(doneButton);
+  doneContainer.appendChild(doneBtnLabel);
+
+  const container = document.createElement('div');
+  container.style.display = "flex";
+  container.style.width = "200px";
+  container.style.justifyContent = "space-between";
+  container.style.alignItems = "center";
+  container.appendChild(doneContainer);
+  
+  divArticle.appendChild(container);
 
   const objKeys = Object.keys(obj);
 
@@ -144,9 +184,10 @@ function articleComponentCreator(obj) {
 
       if (k === 'date') {
         paragraph.classList.add('date');
+        container.prepend(paragraph);
+      } else {
+        divArticle.appendChild(paragraph);
       }
-
-      divArticle.appendChild(paragraph);
     }
   })
   const span = document.createElement('span');
@@ -165,13 +206,13 @@ function articleComponentCreator(obj) {
   })
 
   divArticle.appendChild(span);
-  console.log(divArticle);
+  
   return divArticle;
 }
-console.log(data);
+
 const articles = document.querySelector('.articles');
-const dataArray = data.map(article => {
-  articles.appendChild(articleComponentCreator(article));
+const dataArray = data.map((article, index) => {
+  articles.appendChild(articleComponentCreator(article, index + 1));
 })
 
 // create form for creating new article
