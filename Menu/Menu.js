@@ -1,12 +1,12 @@
 /* This is the data we will be using, study it but don't change anything, yet. */
 
 let menuItems = [
-  'Students',
-  'Faculty',
+  "Students",
+  "Faculty",
   "What's New",
-  'Tech Trends',
-  'Music',
-  'Log Out'
+  "Tech Trends",
+  "Music",
+  "Log Out"
 ];
 
 /* 
@@ -33,3 +33,38 @@ let menuItems = [
   Step 6: add the menu component to the DOM.
   
 */
+
+function createMenu(arr) {
+  const menu = document.createElement("div");
+  const nav = document.createElement("ul");
+  menu.classList.add("menu");
+  menu.appendChild(nav);
+
+  arr.forEach(item => {
+    let li = document.createElement("li");
+    li.textContent = item;
+    nav.appendChild(li);
+  });
+
+  // make menu slide in/out from left side of screen
+  menu.style.width = "0";
+  menu.style.display = "block";
+  menu.style.overflowX = "hidden";
+  menu.style.transition = "all 0.4s ease";
+
+  const menuButton = document.querySelector(".menu-button");
+  menuButton.addEventListener("click", () => {
+    menu.classList.toggle("menu--open");
+    
+    if (menu.classList.contains("menu--open")) {
+      menu.style.width = "350px";
+    } else {
+      menu.style.width = "0";
+    }
+  });
+
+  return menu;
+}
+
+const header = document.querySelector(".header");
+header.prepend(createMenu(menuItems));

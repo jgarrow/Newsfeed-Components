@@ -85,6 +85,20 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: 'Why You Should Use GatsbyJS',
+    date: 'July 4th, 2019',
+    firstParagraph: `GatsbyJS is the best. It's a framework for React that can create super fast websites!`,
+    secondParagraph: `You can even connect it with Netlify CMS to create a blog! You should check it out.`,
+    thirdParagraph: `Even though I'm brand new to React and Gatsby, I've been working on making my own personal site/blog using GatsbyJS and Netlify CMS. It's challenging with my limited knowledge, but it's awesome!`
+  },
+  {
+    title: 'Avatar: The Last Airbender',
+    date: 'April 25th, 2019',
+    firstParagraph: `ATLA is one of the greatest cartoons ever. Not only does it create a beautiful world, it has fantastic character development.`,
+    secondParagraph: `Zuko has one of the greatest redemption arcs and you can see growth in all of the main characters from when they're first introduced to the end of the final season. The character development isn't limited to one or two people.`,
+    thirdParagraph: `I'm so excited for the live-action remake of the series that's coming to Netflix! It better not be as horrendous as the live-action movie...we don't talk about that monstrosity.`
   }
 ];
 
@@ -101,14 +115,220 @@ const data = [
 
   Hint: You will need to use createElement more than once here!
 
-  Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+  Your function should take either an object as its one argument, or 5 separate arguments mapping to each piece of the data object above.
 
   Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
 
   Step 3: return the entire component.
 
-  Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
+  Step 4: Map over the data, creating a component for each object and add each component to the DOM as children of the 'articles' div.
 
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+
+// function doneReading(id, article) {
+//   if (document.querySelector(id).checked) {
+//     article.style.display = "none";
+//   }
+// };
+
+function articleComponentCreator(obj, btnId) {
+  const divArticle = document.createElement('div');
+  divArticle.classList.add('article');
+  
+  const title = document.createElement('h2');
+  title.textContent = obj.title;
+  divArticle.appendChild(title);
+
+  const doneButton = document.createElement('input');
+  doneButton.type = "checkbox";
+  doneButton.id = `done-btn${btnId}`;
+  // Make article "disappear" when done button is checked
+  doneButton.onclick = function doneReading() {
+    {
+      if (document.querySelector(`#done-btn${btnId}`).checked) {
+        divArticle.style.animation = "articleDisappear 0.3s forwards";
+
+        divArticle.addEventListener('animationend', () => {
+          divArticle.style.display = "none";
+        })
+      }
+    };
+  }
+
+  const doneBtnLabel = document.createElement('label');
+  doneBtnLabel.htmlFor = `done-btn${btnId}`;
+  doneBtnLabel.textContent = "Done reading";
+  doneBtnLabel.style.fontSize = "14px";
+
+  const doneContainer = document.createElement('div');
+  doneContainer.appendChild(doneButton);
+  doneContainer.appendChild(doneBtnLabel);
+
+  const container = document.createElement('div');
+  container.style.display = "flex";
+  container.style.width = "200px";
+  container.style.justifyContent = "space-between";
+  container.style.alignItems = "center";
+  container.appendChild(doneContainer);
+  
+  divArticle.appendChild(container);
+
+  const objKeys = Object.keys(obj);
+
+  objKeys.forEach(k => {
+    if (k === 'date' || k.includes('Paragraph')) {
+      let paragraph = document.createElement('p');
+      paragraph.textContent = obj[k];
+
+      if (k === 'date') {
+        paragraph.classList.add('date');
+        container.prepend(paragraph);
+      } else {
+        divArticle.appendChild(paragraph);
+      }
+    }
+  })
+  const span = document.createElement('span');
+  span.classList.add('expandButton');
+  // initialize span.textContent
+  span.textContent = 'Expand';
+
+  span.addEventListener('click', () => {
+    divArticle.style.transition = 'all 0.15s ease-in-out';
+    divArticle.classList.toggle('article-open');
+    if (divArticle.classList.contains('article-open')) {
+      span.textContent = 'Close';
+    } else {
+      span.textContent = 'Expand';
+    }
+  })
+
+  divArticle.appendChild(span);
+  
+  return divArticle;
+}
+
+const articles = document.querySelector('.articles');
+const dataArray = data.map((article, index) => {
+  articles.appendChild(articleComponentCreator(article, index + 1));
+})
+
+// create form for creating new article
+const formContainer = document.createElement('div');
+const formHeader = document.createElement('h3');
+const form = document.createElement('form');
+const titleLabel = document.createElement('label');
+const titleInput = document.createElement('input');
+const contentLabel = document.createElement('label');
+const contentInput = document.createElement('textarea');
+const submit = document.createElement('input');
+// const labelContainer = document.createElement('div');
+
+form.id = 'new-article';
+titleInput.id = 'title';
+contentInput.id = 'content';
+formContainer.classList.add('form-container');
+
+titleInput.type = 'text';
+submit.type = 'submit';
+
+titleInput.name = 'title';
+contentInput.name = 'content';
+
+titleLabel.for = 'title';
+contentLabel.for = 'content';
+
+formHeader.textContent = 'Submit New Article';
+titleLabel.textContent = 'Title';
+contentLabel.textContent = 'Content';
+
+contentInput.form = 'new-article';
+contentInput.rows = '20';
+contentInput.cols = '20';
+
+titleLabel.textContent = 'Title:';
+contentLabel.textContent = 'Content:';
+
+form.method = 'get';
+
+form.appendChild(formHeader);
+form.appendChild(titleLabel);
+form.appendChild(titleInput);
+form.appendChild(contentLabel);
+form.appendChild(contentInput);
+form.appendChild(submit);
+formContainer.appendChild(form);
+
+// form styles
+formContainer.style.display = 'flex';
+formContainer.style.flexWrap = 'nowrap';
+formContainer.style.justifyContent = 'center';
+formContainer.style.alignItems = 'center';
+formContainer.style.width = '450px';
+formContainer.style.margin = '0 auto 2rem';
+formContainer.style.boxShadow = '2px 2px 2px lightgrey';
+formContainer.style.borderRadius = '10px';
+formContainer.style.border = '1px solid lightgrey';
+formContainer.style.padding = '10px 15px';
+formContainer.style.backgroundColor = 'white';
+
+form.style.display = 'flex';
+form.style.flexDirection = 'column';
+form.style.width = '400px';
+form.style.height = '400px';
+
+titleInput.style.margin = '1rem 0';
+titleInput.style.borderRadius = '4px';
+titleInput.style.padding = '8px 15px';
+titleInput.style.border = '1px solid #ccc';
+titleInput.style.fontSize = '1em';
+titleInput.style.backgroundColor = '#fffef7';
+
+contentInput.style.marginBottom = '1rem';
+contentInput.style.borderRadius = '4px';
+contentInput.style.padding = '8px 15px';
+contentInput.style.border = '1px solid #ccc';
+contentInput.style.fontSize = '1em';
+contentInput.style.backgroundColor = '#fffef7';
+
+submit.style.borderRadius = '4px';
+submit.style.fontSize = '1em';
+submit.style.backgroundColor = '#fffef7';
+
+submit.addEventListener('mouseenter', () => {
+  submit.style.backgroundColor = 'lightgrey';
+
+  submit.addEventListener('mouseleave', () => {
+    submit.style.backgroundColor = '#fffef7';
+  })
+})
+
+const body = document.querySelector('body');
+formContainer.appendChild(form);
+body.appendChild(formContainer);
+
+// Creates a new article when form is submitted
+document.querySelector('form').onsubmit = function(e) {
+  e.preventDefault();
+  let date = new Date();
+  date = date.toLocaleDateString("en-US", {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+  const title = document.getElementById('title').value;
+  const contentString = document.getElementById('content').value;
+
+  const newArticle = {
+    title,
+    date,
+  }
+
+  let contentArray = contentString.split("\n");
+  contentArray.forEach((item, index) => {
+    newArticle[`${index + 1}Paragraph`] = item;
+  })
+  articles.appendChild(articleComponentCreator(newArticle));
+}
